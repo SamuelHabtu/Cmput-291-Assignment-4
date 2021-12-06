@@ -1,11 +1,16 @@
+import pymongo
+
+
 def main():
-    import pymongo
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     mydb = myclient["A4dbEmbed"]
-    mycol = mydb[tracks]
-    myquery = {//query in here}
+    print(mydb.list_collection_names())
+    
+    myquery = {'''db.mydb.aggregate
+              ([{$match:{track_id:{ $regex:/^70/ }} }, 
+              {$group:{_id:null, avg_danceability:{$avg:"$danceability"}}}]);
+    '''}
     mydoc = mycol.find(myquery)
-    pass
 
 if __name__ == "__main__":
     main()
