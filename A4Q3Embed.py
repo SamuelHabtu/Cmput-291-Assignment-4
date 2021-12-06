@@ -2,7 +2,7 @@ import pymongo
 
 def main():
     client = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = client["A4dbNorm"]
+    db = client["A4dbEmbed"]
     col = db["artiststracks"]
     query = col.aggregate([{ "$unwind": "$tracks" },{ "$group":      {
             "_id":"$artist_id", 
