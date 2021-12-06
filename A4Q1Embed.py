@@ -6,29 +6,11 @@ def main():
     mydb = myclient["A4dbEmbed"]
     print(mydb.list_collection_names())
     
-    myquery = {'''db.mydb.group({
-
-    "key":{
-            "artists": true
-    },
-    "initial": {
-            "sumtracks": 0
-    },
-    "reduce": function( obj , prev ){
-
-
-
-            prev.sumtracks  = prev.sumtracks  + obj.tracks  - 0;
-
-    },
-    "finalize": function( prev ){
-
-    },
-    "cond": {
-    
-    }
-
-    });
+    myquery = {'''db.artiststracks.find
+    (
+        {'$where':'this.tracks.length > 1'}, 
+        {'artist_id':1, 'name':1, 'num_tracks' : {'$size': '$tracks'}}
+    );
     '''}
     mydoc = mycol.find(myquery)
 
