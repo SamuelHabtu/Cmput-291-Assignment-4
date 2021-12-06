@@ -4,13 +4,18 @@ def main()
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     mydb = myclient["A4dbNorm"]
     
-    myquery = {'''db.mydb.aggregate(
+    myquery = {'''db.artiststracks.aggregate(
     [
-        { $group: {_id:"$artist_ids", 
-        total_length: {$sum: "$duration"}, 
-        artist_ids:{$first :"$artist_ids"} } }
+    { $unwind: "$tracks" },
+        { $group: 
+        {
+            _id:"$artist_id", 
+            total_length: {$sum: "$tracks.duration"}, 
+            artist_ids:{$first :"$artist_id"} 
+        } 
+    }
     ]
-    );
+);
     '''}
     mydoc = mycol.find(myquery)
     
