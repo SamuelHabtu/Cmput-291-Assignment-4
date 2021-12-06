@@ -1,24 +1,16 @@
 import pymongo
 
-def main()
-    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["A4dbNorm"]
-    
-    myquery = {'''db.artiststracks.aggregate(
-    [
-    { $unwind: "$tracks" },
-        { $group: 
-        {
-            _id:"$artist_id", 
-            total_length: {$sum: "$tracks.duration"}, 
-            artist_ids:{$first :"$artist_id"} 
-        } 
-    }
-    ]
-);
-    '''}
-    mydoc = mycol.find(myquery)
-    
+def main():
+    client = pymongo.MongoClient("mongodb://localhost:27017/")
+    db = client["A4dbNorm"]
+    col = db["artiststracks"]
+    query = col.aggregate([{ "$unwind": "$tracks" },{ "$group":      {
+            "_id":"$artist_id", 
+            "total_length": {"$sum": "$tracks.duration"}, 
+            "artist_ids":{"$first" :"$artist_id"} } }])
+
+    for doc in query:
+        print(doc)    
 
 if __name__ == "__main__":
     main()

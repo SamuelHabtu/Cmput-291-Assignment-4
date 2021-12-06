@@ -6,7 +6,7 @@ def main():
     col = db["tracks"]
     query = col.aggregate([{"$match":{"track_id":{ "$regex":"/^70/ "}} }, {"$group":{"_id":"null", "avg_danceability":{"$avg":"$danceability"}}}])
 
-    for doc in query:
+    for doc in list(query):
         print(doc)    
 
 if __name__ == "__main__":

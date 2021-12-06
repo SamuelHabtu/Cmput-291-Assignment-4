@@ -24,7 +24,6 @@ def main():
     tracks              = getData(file_names[1])
     artists_collection.insert_many(artists)
     tracks_collection.insert_many(tracks)
-
     #database = dropCOllections(database, file_names) used for testing
 if __name__ == "__main__":
     main()

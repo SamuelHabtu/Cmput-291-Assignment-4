@@ -9,6 +9,7 @@ def getData(name):
 
 def embedData(artists, tracks):
     #assumption: it's alright if we use python to do the embedding
+    #if we had to use mongocommands we would of done something like: artists.aggregate([{"$lookup":{"from": "tracks","localField": "tracks", "foreignField": "track_id","as": "tracks" }}])
     #go through each artist and using its track 
     for i in range(len(artists)):
         #for each artist check their 'tracks' and fetch their data
