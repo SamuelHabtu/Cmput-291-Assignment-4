@@ -6,9 +6,10 @@ def main():
     mydb = myclient["A4dbEmbed"]
     print(mydb.list_collection_names())
     
-    myquery = {'''db.mydb.aggregate
-              ([{$match:{track_id:{ $regex:/^70/ }} }, 
-              {$group:{_id:null, avg_danceability:{$avg:"$danceability"}}}]);
+    myquery = {'''db.artiststracks.aggregate([
+              {$unwind: "$tracks" },     
+              {$match:{"tracks.track_id":{ $regex:/^70/ }} }, 
+              {$group:{_id:null, avg_danceability:{$avg:"$tracks.danceability"}}}]);
     '''}
     mydoc = mycol.find(myquery)
 
