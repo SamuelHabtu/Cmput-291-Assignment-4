@@ -1,12 +1,13 @@
 import pymongo
 
 def main():
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = client["A4dbNorm"]
-    col = db["tracks"]
-    query = col.find({"$match":{"track_id": "$regex":"/^70/ ",{"avg(danceability)": 1})
-    for doc in query:
-        print(doc)    
+    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["A4dbNorm"]
+    print(mydb.list_collection_names())
+    mycol = mydb["tracks"]
+    myquery = {'''db.tracks.aggregate([{$match:{track_id:{ $regex:/^70/ }} }, {$group:{_id:'', avg_danceability:{$avg:"$danceability"}}}]);'''}
+    mydoc = mycol.find(myquery)
+    
 
 if __name__ == "__main__":
     main()
