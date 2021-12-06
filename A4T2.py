@@ -7,8 +7,8 @@ def getData(name):
         data = loads(file.read())
     return data
 
-def embedData(artists, tracks):
-
+def embedData(database, artists, tracks):
+    '''
     #go through each artist and using its track 
     for i in range(len(artists)):
         #for each artist check their 'tracks' and fetch their data
@@ -18,7 +18,17 @@ def embedData(artists, tracks):
             for track in tracks:
                 if(track['track_id'] == track_id):
                     artists[i]['tracks'][j] = track
-    return artists
+    '''
+        database.artists.aggregate([
+    {
+    $lookup:{
+                from: "tracks",       // tracks collection
+                localField: "tracks",   // field in artists can be an array
+                foreignField: "track_id", // field in tracks
+                as: "tracks"         // alias
+            }
+    }]).pretty()
+    return database
 
 def main():
 
@@ -27,7 +37,7 @@ def main():
     db_name                     = "A4dbEmbed"
     database                    = client[db_name]
     artists_tracks_collection   = database[file_names[0][:-5] + file_names[1][:-5]]
-    artists_tracks              = embedData(getData(file_names[0]), getData(file_names[1]))
+    artists_tracks              = embedData(database, getData(file_names[0]), getData(file_names[1]))
     artists_tracks_collection.insert_many(artists_tracks)
 
 if __name__ == "__main__":
